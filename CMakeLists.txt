@@ -4,22 +4,13 @@ SET(BST_INSTALL_CATEGORY Libraries)
 PROJECT(Gras)
 
 ###############################################################################
-# Adjust paths to match ToolBOS install conventions. 
-###############################################################################
-IF (CMAKE_MODULE_PATH MATCHES "ToolBOSCore")
-  SET(CMAKE_INSTALL_PREFIX $ENV{SIT}/${BST_INSTALL_CATEGORY}/Gras CACHE PATH "Cmake prefix" FORCE)
-  MESSAGE(STATUS "Setting CMAKE_INSTALL_PREFIX to ${CMAKE_INSTALL_PREFIX}")
-  MESSAGE(STATUS "Setting output paths to comply with BST")
-  SET(PLATFORM_INSTALL_DIR $ENV{MAKEFILE_PLATFORM})
-  SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/${PLATFORM_INSTALL_DIR})
-  SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib/${PLATFORM_INSTALL_DIR})
-ENDIF()
-
-###############################################################################
 # Create library from Gras source files
 ###############################################################################
 SET(SRC src/AStar.cpp src/SearchAlgorithm.cpp src/SearchNode.cpp)
-SET_PROPERTY(SOURCE ${SRC} PROPERTY COMPILE_FLAGS "-O2")
+
+IF (UNIX)
+  SET_PROPERTY(SOURCE ${SRC} PROPERTY COMPILE_FLAGS "-O2")
+ENDIF()
 
 ADD_LIBRARY(Gras SHARED ${SRC})
 TARGET_INCLUDE_DIRECTORIES(Gras PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
